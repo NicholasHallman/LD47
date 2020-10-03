@@ -1,1 +1,1 @@
-pico8 -c ./src/Assets.p8 -root_path ./src
+pico8 -c ./Assets.p8 -root_path ./src
