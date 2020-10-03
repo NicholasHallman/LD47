@@ -16,7 +16,6 @@ function make_world ()
     is_touching_solid = function (self, player)
 
       on_tile = self.get_tile(flr((player.x + 64) / 8), flr((player.y + 64) / 8))
-      printh('touching ' .. on_tile)
       if(on_tile > 191) then
         return true
       end

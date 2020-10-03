@@ -34,6 +34,8 @@ function make_player()
     jump = false,
     sword = false,
     move = false, 
+    force_up = 0,
+    slow_fall = true,
 
     draw = function (self)
       self.character_frame(self)
@@ -52,10 +54,35 @@ function make_player()
       else
         self.move = false
         self.timers.walk = 0
+      end  
+      
+      if(btnp(5)) then self.sword = true end
+
+      -- Jump code
+      if(btn(4)) then 
+        if on_ground then
+          self.jump = true 
+          self.force_up = 3
+        end
+        if self.slow_fall then self.gravity = 9.8 / (60 * 2) end 
+      else
+        self.slow_fall = false
+        self.gravity = 9.8 / 60
       end
 
-      if(btnp(4)) then self.jump = true end
-      if(btnp(5)) then self.sword = true end
+      if self.force_up > 0 then
+        if not world:is_touching_solid({x = (self.x + 4), y = self.y - self.force_up}) then
+          self.y -= self.force_up
+        else 
+          self.slow_fall = false
+          self.force_down = 9.8
+          self.force_up = 0
+        end
+        self.force_up -= self.gravity
+      end
+
+      on_ground = world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)})
+      self.is_touching_ground = on_ground
 
       if not self.is_touching_ground then 
         self.y += self.down_force
@@ -65,12 +92,18 @@ function make_player()
         end
       else
         self.down_force = 0
+        self.jump = false
+        self.slow_fall = true
         stuck = world:is_touching_solid({x = (self.x + 4), y = (self.y + 7)})
         if(stuck) then
           self.y -= 1
           printh('stuck')
         end
       end
+
+      
+
+      
     end,
 
     sword_frame = function (self) 
