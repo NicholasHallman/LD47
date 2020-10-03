@@ -1,6 +1,9 @@
 
 function make_world ()
   world = {
+
+    enemies = {},
+
     non_solid_tiles = {},
     
     get_tile = function (x, y)
@@ -30,10 +33,19 @@ function make_world ()
       return false
     end,
 
+    update = function (self)
+      for enemy in all(self.enemies) do
+        enemy:update()
+      end
+    end,
     
     draw = function (self, player)
       camera(player.x, player.y)
       map(0, 0, 0, 0, 128, 32)
+
+      for enemy in all(self.enemies) do
+        enemy:draw()
+      end
     end
   }
 
