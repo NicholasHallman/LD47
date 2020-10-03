@@ -44,13 +44,13 @@ function make_player()
     
     update = function (self)
       if(btn(left)) then 
-        if not world:is_touching_solid({x = (self.x - 1), y = self.y}) then
+        if not world:is_touching_solid({x = (self.x - 1), y = self.y}) or world:is_touching_platform({x = (self.x - 1), y = self.y}) then
           self.x = self.x - 1 
           self.move = true
           self.direction = left
         end
       elseif(btn(right)) then 
-        if not world:is_touching_solid({x = (self.x + 8), y = self.y}) then
+        if not world:is_touching_solid({x = (self.x + 8), y = self.y}) or world:is_touching_platform({x = (self.x + 8), y = self.y}) then
           self.x = self.x + 1 
           self.move = true
           self.direction = right
