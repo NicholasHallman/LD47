@@ -60,12 +60,16 @@ function make_player()
         self.timers.walk = 0
       end  
       
-      if(btnp(5)) then self.sword = true end
+      if(btnp(5)) then 
+        self.sword = true 
+        sfx(0)
+      end
 
       -- Jump code
       if(btn(4)) then 
         if on_ground then
           self.jump = true 
+          sfx(1)
           self.force_up = 3
         end
         if self.slow_fall then self.gravity = 9.8 / (60 * 2) end 
@@ -110,15 +114,16 @@ function make_player()
 
     sword_frame = function (self) 
       local frame = self.frames.sword[1]
-      for i = 1, 4 do 
-        if(self.timers.sword < i*2) then
-          frame = self.frames.sword[i]
-          break
-        end
+      if(self.timers.sword == 1) then
+        frame = self.frames.sword[2]
+      elseif(self.timers.sword == 2) then
+        frame = self.frames.sword[3]
+      else
+        frame = self.frames.sword[4]
       end
 
       self.timers.sword += 1
-      if(self.timers.sword >= 8) then
+      if(self.timers.sword >= 6) then
         self.timers.sword = 0
         self.sword = false
       end
