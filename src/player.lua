@@ -19,7 +19,7 @@ function make_player()
     gravity = 9.8 / 60, 
     down_force = 0,
     terminal_velocity = 5,
-    is_touching_ground = false,
+    is_touching_ground = true,
 
     frames = {
       stand = 0,
@@ -67,6 +67,11 @@ function make_player()
         end
       else
         self.down_force = 0
+        stuck = world:is_touching_solid({x = (self.x + 4), y = (self.y + 7)})
+        if(stuck) then
+          self.y -= 1
+          printh('stuck')
+        end
       end
     end,
 
@@ -108,6 +113,10 @@ function make_player()
       end 
 
       spr(frame,self.x+64,self.y+64,1,1,self.direction==left,false)
+    end,
+
+    is_wall = function(self) 
+      world:is_touching_solid({x = player.x, y = player.y})
     end
   }
   
