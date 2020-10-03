@@ -21,6 +21,15 @@ function make_world ()
       end
       return false
     end,
+
+    is_touching_platform = function (self, player)
+      on_tile = self.get_tile(flr((player.x + 64) / 8), flr((player.y + 64) / 8))
+      if(on_tile > 239 and on_tile < 252) then
+        return true
+      end
+      return false
+    end,
+
     
     draw = function (self, player)
       camera(player.x, player.y)

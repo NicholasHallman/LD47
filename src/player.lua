@@ -44,13 +44,17 @@ function make_player()
     
     update = function (self)
       if(btn(left)) then 
-        self.x = self.x - 1 
-        self.move = true
-        self.direction = left
+        if not world:is_touching_solid({x = (self.x - 1), y = self.y}) then
+          self.x = self.x - 1 
+          self.move = true
+          self.direction = left
+        end
       elseif(btn(right)) then 
-        self.x = self.x + 1 
-        self.move = true
-        self.direction = right
+        if not world:is_touching_solid({x = (self.x + 8), y = self.y}) then
+          self.x = self.x + 1 
+          self.move = true
+          self.direction = right
+        end
       else
         self.move = false
         self.timers.walk = 0
@@ -73,7 +77,9 @@ function make_player()
       if self.force_up > 0 then
         if not world:is_touching_solid({x = (self.x + 4), y = self.y - self.force_up}) then
           self.y -= self.force_up
-        else 
+        elseif world:is_touching_platform({x = (self.x + 4), y = self.y - self.force_up}) then
+          self.y -= self.force_up
+        else
           self.slow_fall = false
           self.force_down = 9.8
           self.force_up = 0
@@ -100,10 +106,6 @@ function make_player()
           printh('stuck')
         end
       end
-
-      
-
-      
     end,
 
     sword_frame = function (self) 
