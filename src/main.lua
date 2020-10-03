@@ -1,11 +1,5 @@
+#include ./src/player.lua
+
 function _init()
-    
-end
-
-function _update()
-    
-end
-
-function _draw()
-    
+    print(player.x)
 end

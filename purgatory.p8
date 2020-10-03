@@ -1,16 +1,10 @@
 pico-8 cartridge // http://www.pico-8.com
-version 8
+version 18
 __lua__
+#include ./src/player.lua
+
 function _init()
-    
-end
-
-function _update()
-    
-end
-
-function _draw()
-    
+    print(player.x)
 end
 __gfx__
 00000000666666660000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
