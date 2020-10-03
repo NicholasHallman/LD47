@@ -3,8 +3,6 @@ right = 1
 up = 2
 down = 3
 sword_offset = 8
-player_x = 64
-player_y = 64
 
 function make_player()
   player = {
@@ -45,14 +43,14 @@ function make_player()
     update = function (self)
       if(btn(left)) then 
         self.x = self.x - 1 
-        move = true
-        direction = left
+        self.move = true
+        self.direction = left
       elseif(btn(right)) then 
         self.x = self.x + 1 
-        move = true
-        direction = right
+        self.move = true
+        self.direction = right
       else
-        move = false
+        self.move = false
         self.timers.walk = 0
       end
 
@@ -76,7 +74,7 @@ function make_player()
     end,
 
     sword_frame = function (self) 
-      frame = self.frames.sword[1]
+      local frame = self.frames.sword[1]
       for i = 1, 4 do 
         if(self.timers.sword < i*2) then
           frame = self.frames.sword[i]
@@ -90,23 +88,24 @@ function make_player()
         self.sword = false
       end
 
-      flip = self.direction == self.right
-      sword_x = player_x - sword_offset
-      if(flip) sword_x = player_x + sword_offset
-      sword_y = player_y
+      local flip = self.direction==right
+      sword_x = self.x + 64 - sword_offset
+      if(flip) sword_x = self.x + 64 + sword_offset
+      sword_y = self.y + 64
       spr(frame, sword_x, sword_y, 1, 1, flip, false)
     end,
 
     character_frame = function (self) 
-      frame = self.frames.stand
-      if(jump) then
+      local frame = self.frames.stand
+      if(self.jump) then
         frame = self.frames.jump
+        self.timers.jump+=1
         if(self.timers.jump>30) then
           self.timers.jump = 0
-          jump = false
+          self.jump = false
         end
-      elseif(walk) then
-        if(self.timers.walk > 10) then s=1 end
+      elseif(self.move) then
+        if(self.timers.walk > 10) then frame = self.frames.walk end
 
         self.timers.walk += 1
         if(self.timers.walk>=20) then self.timers.walk=0 end
