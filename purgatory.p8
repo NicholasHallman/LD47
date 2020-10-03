@@ -7,17 +7,17 @@ __lua__
 player = make_player()
 
 function _init()
-    print(player.x)
+  print(player.x)
 end
 
 function _draw()
-    cls(0)
-    player:draw()
+  cls(0)
+  player:draw()
 end
 
 function _update()
-    player:update()
-    world:draw(player)
+  player:update()
+  world:draw(player)
 end
 __gfx__
 01111110011111100111111000000777000007770000077700000777000000000000000000000000000000000000000000000000000000000000000000000000
