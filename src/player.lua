@@ -66,6 +66,10 @@ function make_player()
       end
 
       -- Jump code
+
+      on_ground = world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)})
+      self.is_touching_ground = on_ground
+
       if(btn(4)) then 
         if on_ground then
           self.jump = true 
@@ -91,12 +95,15 @@ function make_player()
         self.force_up -= self.gravity
       end
 
-      on_ground = world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)})
-      self.is_touching_ground = on_ground
-
       if not self.is_touching_ground then 
-        self.y += self.down_force
-        self.down_force += self.gravity
+        if not world:is_touching_solid({x = (self.x + 4), y = (self.y + 8 + self.down_force)}) then
+          self.y += self.down_force
+          self.down_force += self.gravity
+        else 
+          while not world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)}) do
+            self.y += 1
+          end
+        end
         if self.down_force > self.terminal_velocity then
           self.down_force = self.terminal_velocity
         end
@@ -104,11 +111,6 @@ function make_player()
         self.down_force = 0
         self.jump = false
         self.slow_fall = true
-        stuck = world:is_touching_solid({x = (self.x + 4), y = (self.y + 7)})
-        if(stuck) then
-          self.y -= 1
-          printh('stuck')
-        end
       end
     end,
 
