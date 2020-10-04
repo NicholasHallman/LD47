@@ -80,8 +80,7 @@ function make_husk()
     end,
 
     hit = function(self, direction)
-      player.sanity -= self.damage
-      player:react_to_hit(direction)
+      player:get_hit(self.damage, direction)
     end
   }
   

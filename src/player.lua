@@ -19,17 +19,19 @@ function make_player()
     down_force = 0,
     terminal_velocity = 5,
     is_touching_ground = true,
-
+    dead = false,
     frames = {
       stand = 0,
       walk = 1,
       jump = 2,
-      sword = {3, 4, 5, 6}
+      sword = {3, 4, 5, 6},
+      die = {16, 17, 18},
     },
     timers = {
       jump = 0,
       move = 0,
-      sword = 0
+      sword = 0,
+      die = 0,
     },
     direction = right,
     jump = false,
@@ -158,7 +160,7 @@ function make_player()
 
         self.timers.walk += 1
         if(self.timers.walk>=20) then self.timers.walk=0 end
-      end 
+      end
 
       spr(frame,self.x+64,self.y+64,1,1,self.direction==left,false)
     end,
@@ -167,7 +169,9 @@ function make_player()
       world:is_touching_solid({x = player.x + 64, y = player.y + 64})
     end,
 
-    react_to_hit = function (self, direction)
+    get_hit = function (self, damage, direction)
+      self.sanity -= damage
+      if self.sanity <= 0 then self.dead = true end
       self.force_x = 2 * direction
     end
   }

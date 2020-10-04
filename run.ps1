@@ -1,1 +1,1 @@
-pico8 -run ./purgatory.p8
+pico8 -root_path ./ -run purgatory.p8
