@@ -42,6 +42,8 @@ function make_player()
     slow_fall = true,
     is_player = true,
     keys = 2,
+    active = true,
+    can_jump = true,
 
     draw = function (self)
       self.character_frame(self)
@@ -78,7 +80,8 @@ function make_player()
       self.is_touching_ground = on_ground
 
       if(btn(4)) then 
-        if on_ground then
+        if on_ground and self.can_jump then
+          self.can_jump = false
           self.jump = true 
           sfx(1)
           self.force_up = 2

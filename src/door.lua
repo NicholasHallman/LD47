@@ -13,7 +13,6 @@ function door_manager()
                     if tile == 82 then 
                         door = make_door(tile, x, y)
                         self.doors[#self.doors+1] = door
-                        printh('found door at: ' .. door.x .. ' ' .. door.y)
                     end
                 end
             end
@@ -21,8 +20,6 @@ function door_manager()
 
         update = function (self, player)
             for i, door in pairs(self.doors) do
-                printh(#self.doors)
-                if i == 2 then printh('distance from door ' .. (player.x + 64) / 8 - door.x .. ' ' .. (player.y + 64) / 8 - door.y) end
                 if abs(((player.x + 64) / 8) - (door.x)) < 1.2 and abs(((player.y + 64) / 8) - door.y) < 1 then
                     player.keys -= 1
                     world.change_tile(door.x, door.y, 0)

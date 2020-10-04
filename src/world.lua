@@ -1,10 +1,44 @@
 
+
+function make_event(x, y, say_1, say_2, say_3)
+  event = {
+    x = x,
+    y = y,
+    say_1 = say_1,
+    say_2 = say_2, 
+    say_3 = say_3,
+    triggered = false,
+    active = false,
+    update = function(self, player)
+      if self.active and (btn(4) or btn(5)) then
+        self.active = false
+        textbox.is_visible = false
+        player.active = true
+      elseif not self.triggered and abs(((player.x + 64) / 8) - self.x) < 2 and abs(((player.y + 64) / 8) - self.y) < 2 then
+        self.triggered = true
+        self.active = true
+        player.active = false
+        textbox.is_visible = true
+        textbox.phrases = {
+          self.say_1,
+          self.say_2,
+          self.say_3,
+        }
+      end
+    end
+  }
+
+  return event
+end
+
 function make_world ()
   world = {
 
     shake_camera = false,
 
     enemies = {},
+
+    events = {},
 
     non_solid_tiles = {},
     
@@ -57,9 +91,21 @@ function make_world ()
       return false
     end,
 
+    init = function (self)
+      self.events[1] = make_event(2, 28, 'welcome to purgatory', 'you may never leave', '')
+      self.enemies[1] = make_husk()
+      self.enemies[1].x = 58 * 8
+      self.enemies[1].y = 30 * 8
+
+      printh("events: " .. self.events[1].say_1)
+    end,
+
     update = function (self)
       for enemy in all(self.enemies) do
         enemy:update(player)
+      end
+      for event in all(self.events) do
+        event:update(player)
       end
     end,
     
@@ -81,3 +127,4 @@ function make_world ()
 
   return world
 end
+
