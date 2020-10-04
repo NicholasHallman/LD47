@@ -19,7 +19,8 @@ function make_world ()
     is_touching_solid = function (self, entity)
 
       on_tile = self.get_tile(flr((entity.x) / 8), flr((entity.y) / 8))
-      if(on_tile > 191) then
+      if entity.is_player == true then printh('on time: ' .. on_tile) end
+      if(on_tile >= 64 and (on_tile - 76) % 16 != 0 and (on_tile - 77) % 16 != 0 and (on_tile - 78) % 16 != 0 and (on_tile - 79) % 16 != 0) then
         return true
       end
       return false
@@ -27,7 +28,7 @@ function make_world ()
 
     is_touching_platform = function (self, entity)
       on_tile = self.get_tile(flr((entity.x) / 8), flr((entity.y) / 8))
-      if(on_tile > 239 and on_tile < 253) then
+      if(on_tile > 111 and on_tile < 125) then
         return true
       end
       return false

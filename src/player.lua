@@ -40,6 +40,7 @@ function make_player()
     force_up = 0,
     force_x = 0,
     slow_fall = true,
+    is_player = true,
 
     draw = function (self)
       self.character_frame(self)
@@ -120,6 +121,7 @@ function make_player()
       if abs(self.force_x) > 0 and not world:is_touching_solid({x = (self.x + self.force_x) + 64, y = self.y + 64}) then
         self.x -= self.force_x
         if self.force_x > 0 then self.force_x -= 0.2 else self.force_x += 0.2 end
+        if self.force_x < 0.5 and self.force_x > -0.5 then self.force_x = 0 end
       end
     end,
 

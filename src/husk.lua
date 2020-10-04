@@ -5,9 +5,9 @@ function make_husk()
     x = 0,
     y = 0,
     frames = {
-      idle = {start = 64, len = 2, timeout = 6 },
-      walk = {start = 65, len = 2, timeout = 4 },
-      attack = {start = 67, len = 4, timeout = 2},
+      idle = {start = 9, len = 2, timeout = 6 },
+      walk = {start = 10, len = 2, timeout = 4 },
+      attack = {start = 12, len = 4, timeout = 2},
     },
     current_frame = 64,
     action = 'idle',
@@ -60,14 +60,14 @@ function make_husk()
       -- walk toward the player
       -- when touching player, play bite animation
 
-      self.on_ground = world:is_touching_solid({x = self.x, y = self.y + 8})
+      self.on_ground = world:is_touching_solid({x = self.x, y = self.y + 7})
       if not self.on_ground then
         self.forces.down = self.forces.down + self.gravity
         if self.forces.down > self.terminal_velocity then self.forces.down = self.terminal_velocity end
       else
         self.forces.down = 0
       end
-      self:move({x = 0, y = self.forces.down - self.forces.up}, {x = 0, y = 8})
+      self:move({x = 0, y = self.forces.down - self.forces.up}, {x = 0, y = 7})
     end,
 
     move = function(self, vector, adjust)
