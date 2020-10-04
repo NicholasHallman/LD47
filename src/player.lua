@@ -91,7 +91,6 @@ function make_player()
       else
         self.slow_fall = false
         self.gravity = 9.8 / 60
-      else
         self.can_jump = true
       end
 
