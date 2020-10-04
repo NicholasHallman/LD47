@@ -8,7 +8,6 @@ world = make_world()
 
 player = make_player()
 
-
 function _init()
   print(player.x)
   world.enemies[1] = make_husk()

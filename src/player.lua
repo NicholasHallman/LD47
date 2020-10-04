@@ -11,6 +11,7 @@ function make_player()
     jump_force = 0,
     is_jumping = false,
     speed = 4,
+    sanity = 100,
     strength = 2,
     double_sword_enabled = false,
     double_jump_enabled = false,
@@ -35,6 +36,7 @@ function make_player()
     sword = false,
     move = false, 
     force_up = 0,
+    force_x = 0,
     slow_fall = true,
 
     draw = function (self)
@@ -74,7 +76,7 @@ function make_player()
         if on_ground then
           self.jump = true 
           sfx(1)
-          self.force_up = 3
+          self.force_up = 2
         end
         if self.slow_fall then self.gravity = 9.8 / (60 * 2) end 
       else
@@ -111,6 +113,11 @@ function make_player()
         self.down_force = 0
         self.jump = false
         self.slow_fall = true
+      end
+
+      if abs(self.force_x) > 0 and not world:is_touching_solid({x = (self.x + self.force_x) + 64, y = self.y + 64}) then
+        self.x -= self.force_x
+        if self.force_x > 0 then self.force_x -= 0.2 else self.force_x += 0.2 end
       end
     end,
 
@@ -158,6 +165,10 @@ function make_player()
 
     is_wall = function(self) 
       world:is_touching_solid({x = player.x + 64, y = player.y + 64})
+    end,
+
+    react_to_hit = function (self, direction)
+      self.force_x = 2 * direction
     end
   }
   

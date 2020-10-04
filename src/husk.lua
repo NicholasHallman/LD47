@@ -5,13 +5,12 @@ function make_husk()
     x = 0,
     y = 0,
     frames = {
-      idle = {start = 64, len = 2 },
-      walk = {start = 65, len = 2 },
-      attack = {start = 67, len = 4},
+      idle = {start = 64, len = 2, timeout = 6 },
+      walk = {start = 65, len = 2, timeout = 4 },
+      attack = {start = 67, len = 4, timeout = 2},
     },
     current_frame = 64,
     action = 'idle',
-    timeout = 6,
     timeout_count = 0,
     gravity = 9.8 / 60,
     on_ground = false,
@@ -21,6 +20,8 @@ function make_husk()
     },
     flip_x = false,
     terminal_velocity = 5,
+    damage = 5,
+
     draw = function(self) 
       spr(self.current_frame, self.x, self.y, 1, 1, self.flip_x)
       if self.timeout_count == 0 then
@@ -30,7 +31,7 @@ function make_husk()
           self.current_frame = self.frames[self.action].start
         end
       else 
-        if self.timeout_count > self.timeout then
+        if self.timeout_count > self.frames[self.action].timeout then
           self.timeout_count = -1
         end
       end
@@ -41,15 +42,17 @@ function make_husk()
       -- TODO
       -- do you see the player?
       player_pos = {x = player.x + 64, y = player.y + 64}
+      distance = self.x - player_pos.x
+      direction = distance / abs(distance)
+
       if player_pos.y - 8 < self.y and player_pos.y + 4 > self.y then
-        distance = self.x - player_pos.x
         if abs(distance) > 8 then 
-          direction = distance / abs(distance)
           if direction < 0 then self.flip_x = false else self.flip_x = true end
           self.action = 'walk'
-          self:move({x = - direction, y = 0}, {x = 0, y = 0})
+          self:move({x = (-direction) / 2, y = 0}, {x = 0, y = 0})
         else 
           self.action = 'attack'
+          self:hit(direction)
         end
       else 
         self.action = 'idle'
@@ -58,7 +61,6 @@ function make_husk()
       -- when touching player, play bite animation
 
       self.on_ground = world:is_touching_solid({x = self.x, y = self.y + 8})
-      if self.on_ground then printh('on ground: ' .. self.forces.down) else printh('falling: ' .. self.forces.down) end
       if not self.on_ground then
         self.forces.down = self.forces.down + self.gravity
         if self.forces.down > self.terminal_velocity then self.forces.down = self.terminal_velocity end
@@ -75,6 +77,11 @@ function make_husk()
       if not world:is_touching_solid({x = self.x, y = self.y + vector.y + adjust.y}) then
         self.y += vector.y
       end
+    end,
+
+    hit = function(self, direction)
+      player.sanity -= self.damage
+      player:react_to_hit(direction)
     end
   }
   
