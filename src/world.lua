@@ -16,17 +16,17 @@ function make_world ()
       return peek(location)
     end,
     
-    is_touching_solid = function (self, player)
+    is_touching_solid = function (self, entity)
 
-      on_tile = self.get_tile(flr((player.x + 64) / 8), flr((player.y + 64) / 8))
+      on_tile = self.get_tile(flr((entity.x) / 8), flr((entity.y) / 8))
       if(on_tile > 191) then
         return true
       end
       return false
     end,
 
-    is_touching_platform = function (self, player)
-      on_tile = self.get_tile(flr((player.x + 64) / 8), flr((player.y + 64) / 8))
+    is_touching_platform = function (self, entity)
+      on_tile = self.get_tile(flr((entity.x) / 8), flr((entity.y) / 8))
       if(on_tile > 239 and on_tile < 253) then
         return true
       end

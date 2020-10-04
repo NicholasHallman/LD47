@@ -13,6 +13,11 @@ function make_husk()
     action = 'idle',
     timeout = 6,
     timeout_count = 0,
+    gravity = 9.8 / 60,
+    forces = {
+      up = 0,
+      down = 0,
+    },
     
     draw = function(self) 
       spr(self.current_frame, self.x, self.y)
@@ -37,22 +42,19 @@ function make_husk()
       if player_pos.y - 8 < self.y and player_pos.y + 4 > self.y then
         distance = self.x - player_pos.x
         direction = distance / abs(distance)
-        self.x -= direction
+        self:move({x = -direction, y = 0})
       end
-
-
       -- walk toward the player
       -- when touching player, play bite animation
     end,
 
-    move = function(vector)
-      if not world.is_touching_solid({x = self.x + vector.x, y = self.y}) then
+    move = function(self, vector)
+      if not world:is_touching_solid({x = self.x + vector.x, y = self.y}) then
         self.x += vector.x
       end
-      if not world.is_touching_solid({x = self.x, y = self.y + vector.y}) then
-        self.x += vector.x
+      if not world:is_touching_solid({x = self.x, y = self.y + vector.y}) then
+        self.y += vector.y
       end
-      self.y += vector.y
     end
   }
   

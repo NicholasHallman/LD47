@@ -44,13 +44,13 @@ function make_player()
     
     update = function (self)
       if(btn(left)) then 
-        if not world:is_touching_solid({x = (self.x - 1), y = self.y}) or world:is_touching_platform({x = (self.x - 1), y = self.y}) then
+        if not world:is_touching_solid({x = (self.x - 1) + 64, y = self.y + 64}) or world:is_touching_platform({x = (self.x - 1) + 64, y = self.y + 64}) then
           self.x = self.x - 1 
           self.move = true
           self.direction = left
         end
       elseif(btn(right)) then 
-        if not world:is_touching_solid({x = (self.x + 8), y = self.y}) or world:is_touching_platform({x = (self.x + 8), y = self.y}) then
+        if not world:is_touching_solid({x = (self.x + 8) + 64, y = self.y + 64}) or world:is_touching_platform({x = (self.x + 8) + 64, y = self.y + 64}) then
           self.x = self.x + 1 
           self.move = true
           self.direction = right
@@ -67,7 +67,7 @@ function make_player()
 
       -- Jump code
 
-      on_ground = world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)})
+      on_ground = world:is_touching_solid({x = (self.x + 4) + 64, y = (self.y + 8) + 64})
       self.is_touching_ground = on_ground
 
       if(btn(4)) then 
@@ -83,9 +83,9 @@ function make_player()
       end
 
       if self.force_up > 0 then
-        if not world:is_touching_solid({x = (self.x + 4), y = self.y - self.force_up}) then
+        if not world:is_touching_solid({x = (self.x + 4) + 64, y = self.y - self.force_up + 64}) then
           self.y -= self.force_up
-        elseif world:is_touching_platform({x = (self.x + 4), y = self.y - self.force_up}) then
+        elseif world:is_touching_platform({x = (self.x + 4) + 64, y = self.y - self.force_up + 64}) then
           self.y -= self.force_up
         else
           self.slow_fall = false
@@ -96,11 +96,11 @@ function make_player()
       end
 
       if not self.is_touching_ground then 
-        if not world:is_touching_solid({x = (self.x + 4), y = (self.y + 8 + self.down_force)}) then
+        if not world:is_touching_solid({x = (self.x + 4) + 64, y = (self.y + 8 + self.down_force) + 64}) then
           self.y += self.down_force
           self.down_force += self.gravity
         else 
-          while not world:is_touching_solid({x = (self.x + 4), y = (self.y + 8)}) do
+          while not world:is_touching_solid({x = (self.x + 4) + 64, y = (self.y + 8) + 64}) do
             self.y += 1
           end
         end
@@ -157,7 +157,7 @@ function make_player()
     end,
 
     is_wall = function(self) 
-      world:is_touching_solid({x = player.x, y = player.y})
+      world:is_touching_solid({x = player.x + 64, y = player.y + 64})
     end
   }
   
