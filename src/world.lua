@@ -35,7 +35,7 @@ function make_world ()
 
     update = function (self)
       for enemy in all(self.enemies) do
-        enemy:update()
+        enemy:update(player)
       end
     end,
     

@@ -24,5 +24,5 @@ end
 
 function _update()
   player:update()
-  world:update()
+  world:update(player)
 end
