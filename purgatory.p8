@@ -7,9 +7,13 @@ __lua__
 
 #include ./src/door.lua
 
+#include ./src/textbox.lua
+
 door_man = door_manager()
 
 world = make_world()
+
+textbox = make_texbox()
 
 #include ./src/player.lua
 
@@ -27,6 +31,7 @@ function _draw()
   cls(0)
   world:draw(player)
   player:draw()
+  textbox:draw()
 end
 
 function _update()
