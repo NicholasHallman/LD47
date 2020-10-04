@@ -31,12 +31,13 @@ function make_player()
       jump = 0,
       move = 0,
       sword = 0,
-      die = 0,
+      die = 0
     },
     direction = right,
     jump = false,
+    move = false,
+    die = false,
     sword = false,
-    move = false, 
     force_up = 0,
     force_x = 0,
     slow_fall = true,
@@ -158,8 +159,23 @@ function make_player()
 
     character_frame = function (self) 
       local frame = self.frames.stand
-      if(self.jump) then
+
+      if(self.die) then
+        if(self.timers.die>=9) then
+          frame = self.frames.die[3]
+        end
+
+        for i = 1, 3 do
+          if(self.timers.die < i*3) then 
+            frame = self.frames.die[i]
+            break
+          end
+        end
+
+        self.timers.die = max(self.timers.die + 1, 9)
+      elseif(self.jump) then
         frame = self.frames.jump
+
         self.timers.jump+=1
         if(self.timers.jump>30) then
           self.timers.jump = 0
