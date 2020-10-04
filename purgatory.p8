@@ -14,7 +14,7 @@ player = make_player()
 function _init()
   print(player.x)
   world.enemies[1] = make_husk()
-  world.enemies[1].x = 64 + 16
+  world.enemies[1].x = 64 - 32
   world.enemies[1].y = 64
 end
 
