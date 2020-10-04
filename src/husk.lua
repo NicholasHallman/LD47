@@ -10,7 +10,7 @@ function make_husk()
       attack = {start = 67, len = 4},
     },
     current_frame = 64,
-    action = 'idle',
+    action = 'attack',
     timeout = 6,
     timeout_count = 0,
     gravity = 9.8 / 60,
