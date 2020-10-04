@@ -2,7 +2,11 @@
 
 #include ./src/world.lua
 
+#include ./src/door.lua
+
 world = make_world()
+
+door_man = door_manager()
 
 #include ./src/player.lua
 
@@ -13,6 +17,7 @@ function _init()
   world.enemies[1] = make_husk()
   world.enemies[1].x = 64 + 16
   world.enemies[1].y = 64
+  door_man:init()
 end
 
 function _draw()
@@ -24,4 +29,5 @@ end
 function _update()
   player:update()
   world:update(player)
+  door_man:update(player)
 end

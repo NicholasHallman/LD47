@@ -21,6 +21,7 @@ function make_husk()
     flip_x = false,
     terminal_velocity = 5,
     damage = 5,
+    drops_key = false,
 
     draw = function(self) 
       spr(self.current_frame, self.x, self.y, 1, 1, self.flip_x)

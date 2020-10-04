@@ -41,10 +41,12 @@ function make_player()
     force_x = 0,
     slow_fall = true,
     is_player = true,
+    keys = 2,
 
     draw = function (self)
       self.character_frame(self)
       if(self.sword) then self.sword_frame(self) end
+      self:draw_inventory()
     end,
     
     update = function (self)
@@ -121,7 +123,10 @@ function make_player()
       if abs(self.force_x) > 0 and not world:is_touching_solid({x = (self.x + self.force_x) + 64, y = self.y + 64}) then
         self.x -= self.force_x
         if self.force_x > 0 then self.force_x -= 0.2 else self.force_x += 0.2 end
-        if self.force_x < 0.5 and self.force_x > -0.5 then self.force_x = 0 end
+        if self.force_x < 0.5 and self.force_x > -0.5 then 
+          self.force_x = 0 
+          world.shake_camera = false
+        end
       end
     end,
 
@@ -172,9 +177,16 @@ function make_player()
     end,
 
     get_hit = function (self, damage, direction)
+      world.shake_camera = true
       self.sanity -= damage
       if self.sanity <= 0 then self.dead = true end
       self.force_x = 2 * direction
+    end,
+
+    draw_inventory = function(self)
+      for i=0,self.keys do
+        spr(41, self.x + (8 * i), self.y)
+      end
     end
   }
   
