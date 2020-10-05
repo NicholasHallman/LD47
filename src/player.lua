@@ -225,12 +225,12 @@ function make_player()
 
     draw_inventory = function(self)
       for i=0,self.keys do
-        spr(41, self.x + (8 * i), self.y)
+        spr(41, self.x + (8 * i) - 1, self.y + 3)
       end
     end,
 
     draw_sanity = function(self)
-      print("Sanity: "..self.sanity, self.x, self.y + 8)
+      print("sanity: "..self.sanity, self.x, self.y)
     end
   }
   
