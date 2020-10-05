@@ -1,4 +1,44 @@
+function check_hit(enemy, player)
+    local sword_x1 = (player.x + 64 + player.sword_offset)
+    local sword_y1 = player.y + 64
+    local sword_x2 = sword_x1 + player.sword_length
+    local sword_y2 = sword_y1 + 16
+    local sword_p1 = {
+        x = sword_x1,
+        y = sword_y1
+    }
+    local sword_p2 = {
+        x = sword_x2,
+        y = sword_y2
+    }
 
+    local enemy_x1 = enemy.x
+    local enemy_y1 = enemy.y
+    local enemy_x2 = enemy.x + 16
+    local enemy_y2 = enemy.y + 16
+    local enemy_p1 = {
+        x = enemy_x1,
+        y = enemy_y1
+    }
+    local enemy_p2 = {
+        x = enemy_x2,
+        y = enemy_y2
+    }
+
+    -- printh(sword_p1.x >= enemy_p2.x)
+    -- printh(sword_p2.x >= enemy_p1.x)
+
+    -- printh(sword_p1.y)
+    -- printh(enemy_p2.y)
+    printh(sword_p1.y <= enemy_p2.y)
+    -- printh(sword_p2.y)
+    -- printh(enemy_p1.y)
+    printh(sword_p2.y <= enemy_p1.y)
+
+    if (sword_p1.x >= enemy_p2.x or sword_p2.x >= enemy_p1.x) return false; 
+    if (sword_p1.y <= enemy_p2.y or sword_p2.y <= enemy_p1.y) return false; 
+    return true; 
+end
 
 function make_husk()
   husk = {
@@ -46,6 +86,12 @@ function make_husk()
       distance = self.x - player_pos.x
       direction = distance / abs(distance)
 
+      if player.attack then
+        x = check_hit(self, player)
+        if (x) then
+          printh("DIIIEEEEE")
+        end
+      end
       if player_pos.y - 8 < self.y and player_pos.y + 4 > self.y then
         if abs(distance) > 8 then 
           if direction < 0 then self.flip_x = false else self.flip_x = true end

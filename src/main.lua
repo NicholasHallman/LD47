@@ -1,3 +1,4 @@
+#include ./src/enemy_common.lua
 #include ./src/husk.lua
 
 #include ./src/world.lua
