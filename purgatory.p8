@@ -9,15 +9,22 @@ __lua__
 
 #include ./src/textbox.lua
 
+#include ./src/player.lua
+
+#include ./src/menus.lua
+
 door_man = door_manager()
 
 world = make_world()
 
-#include ./src/player.lua
-
 player = make_player()
 
 textbox = make_textbox()
+
+title = make_title()
+help_screen = make_help()
+
+screen = "title"
 
 function _init()
   print(player.x)
@@ -27,15 +34,37 @@ end
 
 function _draw()
   cls(0)
-  world:draw(player)
-  player:draw()
-  textbox:draw()
+  if screen == 'title' then
+    title:draw()
+  elseif screen == 'help' then
+    help_screen:draw()
+  else
+    world:draw(player)
+    player:draw()
+    textbox:draw()
+  end
 end
 
 function _update()
-  if player.active then player:update() end
-  world:update(player)
-  door_man:update(player)
+  if screen == 'title' then 
+    title:update()
+    if title.start_game == true then
+      screen = 'game'
+    elseif title.show_help == true then
+      screen = 'help'
+    end
+  elseif screen == 'help' then
+    help_screen:update()
+    if help_screen.back == true then
+      screen = 'title'
+      help_screen = make_help()
+      title = make_title()
+    end
+  else
+    if player.active then player:update() end
+    world:update(player)
+    door_man:update(player)
+  end
 end
 __gfx__
 01111110011111100111111000000777000007770000077700000777000000000000000000666660000000000066666006666600000000006066060006006060

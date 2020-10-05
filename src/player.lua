@@ -54,13 +54,13 @@ function make_player()
     
     update = function (self)
       if(btn(left)) then 
-        if not world:is_touching_solid({x = (self.x - 1) + 64, y = self.y + 64}) or world:is_touching_platform({x = (self.x - 1) + 64, y = self.y + 64}) then
+        if not world:is_touching_solid({x = (self.x - 1) + 64, y = self.y + 64}) then
           self.x = self.x - 1 
           self.move = true
           self.direction = left
         end
       elseif(btn(right)) then 
-        if not world:is_touching_solid({x = (self.x + 8) + 64, y = self.y + 64}) or world:is_touching_platform({x = (self.x + 8) + 64, y = self.y + 64}) then
+        if not world:is_touching_solid({x = (self.x + 8) + 64, y = self.y + 64}) then
           self.x = self.x + 1 
           self.move = true
           self.direction = right
@@ -101,10 +101,13 @@ function make_player()
           self.y -= self.force_up
         else
           self.slow_fall = false
-          self.force_down = 9.8
+          self.down_force = self.force_up
           self.force_up = 0
         end
         self.force_up -= self.gravity
+        if self.down_force >= 1 then 
+          self.slow_fall = false 
+        end
       end
 
       if not self.is_touching_ground then 

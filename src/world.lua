@@ -97,7 +97,6 @@ function make_world ()
       self.enemies[1].x = 58 * 8
       self.enemies[1].y = 30 * 8
 
-      printh("events: " .. self.events[1].say_1)
     end,
 
     update = function (self)
