@@ -2,18 +2,20 @@ left = 0
 right = 1
 up = 2
 down = 3
-sword_offset = 8
 
 function make_player()
   player = {
     x = 0,
     y = 0,
+    game_over = false,
     jump_force = 0,
     is_jumping = false,
     speed = 4,
     sanity = 100,
     strength = 2,
-    double_sword_enabled = false,
+    defense = 1,
+    sword_length = 16,
+    sword_offset = 8,
     double_jump_enabled = false,
     gravity = 9.8 / 60, 
     down_force = 0,
@@ -24,20 +26,19 @@ function make_player()
       stand = 0,
       walk = 1,
       jump = 2,
-      sword = {3, 4, 5, 6},
+      attack = {3, 4, 5, 6},
       die = {16, 17, 18},
     },
     timers = {
       jump = 0,
       move = 0,
-      sword = 0,
+      attack = 0,
       die = 0
     },
     direction = right,
     jump = false,
     move = false,
-    die = false,
-    sword = false,
+    attack = false,
     force_up = 0,
     force_x = 0,
     slow_fall = true,
@@ -47,12 +48,15 @@ function make_player()
     can_jump = true,
 
     draw = function (self)
-      self.character_frame(self)
-      if(self.sword) then self.sword_frame(self) end
+      self:character_frame()
+      if(self.attack) then self:sword_frame() end
       self:draw_inventory()
+      self:draw_sanity()
     end,
     
     update = function (self)
+      if(self.dead) return
+
       if(btn(left)) then 
         if not world:is_touching_solid({x = (self.x - 1) + 64, y = self.y + 64}) then
           self.x = self.x - 1 
@@ -71,7 +75,7 @@ function make_player()
       end  
       
       if(btnp(5)) then 
-        self.sword = true 
+        self.attack = true 
         sfx(0)
       end
 
@@ -139,24 +143,24 @@ function make_player()
     end,
 
     sword_frame = function (self) 
-      local frame = self.frames.sword[1]
-      if(self.timers.sword == 1) then
-        frame = self.frames.sword[2]
-      elseif(self.timers.sword == 2) then
-        frame = self.frames.sword[3]
+      local frame = self.frames.attack[1]
+      if(self.timers.attack == 1) then
+        frame = self.frames.attack[2]
+      elseif(self.timers.attack == 2) then
+        frame = self.frames.attack[3]
       else
-        frame = self.frames.sword[4]
+        frame = self.frames.attack[4]
       end
 
-      self.timers.sword += 1
-      if(self.timers.sword >= 6) then
-        self.timers.sword = 0
-        self.sword = false
+      self.timers.attack += 1
+      if(self.timers.attack >= 6) then
+        self.timers.attack = 0
+        self.attack = false
       end
 
       local flip = self.direction==right
-      sword_x = self.x + 64 - sword_offset
-      if(flip) sword_x = self.x + 64 + sword_offset
+      sword_x = self.x + 64 - self.sword_offset
+      if(flip) sword_x = self.x + 64 + self.sword_offset
       sword_y = self.y + 64
       spr(frame, sword_x, sword_y, 1, 1, flip, false)
     end,
@@ -164,13 +168,17 @@ function make_player()
     character_frame = function (self) 
       local frame = self.frames.stand
 
-      if(self.die) then
-        if(self.timers.die>=9) then
+      if(self.dead) then
+        if(self.timers.die>=30) then
           frame = self.frames.die[3]
         end
 
+        if(self.timers.die>=120) then
+          self.game_over = true
+        end
+
         for i = 1, 3 do
-          if(self.timers.die < i*3) then 
+          if(self.timers.die < i*10) then 
             frame = self.frames.die[i]
             break
           end
@@ -200,9 +208,18 @@ function make_player()
     end,
 
     get_hit = function (self, damage, direction)
-      world.shake_camera = true
-      self.sanity -= damage
-      if self.sanity <= 0 then self.dead = true end
+      if not self.dead then
+        sfx(2)
+        world.shake_camera = true
+        self.sanity = max(
+          0, 
+          self.sanity - (damage * 1/self.defense)
+        )
+      end
+      if self.sanity <= 0 then 
+        self.dead = true 
+        sfx(3)
+      end
       self.force_x = 2 * direction
     end,
 
@@ -210,6 +227,10 @@ function make_player()
       for i=0,self.keys do
         spr(41, self.x + (8 * i), self.y)
       end
+    end,
+
+    draw_sanity = function(self)
+      print("Sanity: "..self.sanity, self.x, self.y + 8)
     end
   }
   

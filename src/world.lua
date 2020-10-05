@@ -100,11 +100,15 @@ function make_world ()
     end,
 
     update = function (self)
-      for enemy in all(self.enemies) do
-        enemy:update(player)
-      end
-      for event in all(self.events) do
-        event:update(player)
+      if not player.dead then
+        for enemy in all(self.enemies) do
+          enemy:update(player)
+        end
+        for event in all(self.events) do
+          event:update(player)
+        end
+      else 
+        self.shake_camera = false
       end
     end,
     
