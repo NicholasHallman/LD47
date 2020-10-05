@@ -7,6 +7,7 @@ function make_player()
   player = {
     x = 0,
     y = 0,
+    game_over = false,
     jump_force = 0,
     is_jumping = false,
     speed = 4,
@@ -167,6 +168,10 @@ function make_player()
       if(self.dead) then
         if(self.timers.die>=30) then
           frame = self.frames.die[3]
+        end
+
+        if(self.timers.die>=120) then
+          self.game_over = true
         end
 
         for i = 1, 3 do
